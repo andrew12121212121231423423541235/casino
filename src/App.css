@@ -92,6 +92,7 @@
 }
 
 .button {
+  justify-content: center;
   background-color: #00875f;
   color: white;
   padding: 8px;

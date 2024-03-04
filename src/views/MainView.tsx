@@ -4,7 +4,7 @@ import logo from "../../public/casino.jpeg";
 import choice from "../../public/choise.png";
 import star from "../../public/star-full.png";
 import person from "../../public/user.png";
-import ProgressBar from "./ProgressBar.tsx";
+import Button from "../components/Button.tsx";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -15,9 +15,7 @@ const MainView = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [downloaded, setDownloaded] = useState<boolean>(false);
   const [isPWAActive, setIsPWAActive] = useState<boolean>(false);
-  const [installing, setInstalling] = useState<boolean>(false);
-
-  console.log(installing);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleCompleteProgressBar = () => {
     setDownloaded(true);
   };
@@ -42,7 +40,6 @@ const MainView = () => {
     );
 
     window.addEventListener("appinstalled", () => {
-      setInstalling(false);
       setIsPWAActive(true);
     });
 
@@ -55,23 +52,23 @@ const MainView = () => {
   }, []);
 
   const installPWA = async () => {
-    setInstalling(true);
     if (installPromptRef.current) {
-      setInstalling(true);
       await installPromptRef.current.prompt();
       const choiceResult = await installPromptRef.current.userChoice;
+
       if (choiceResult.outcome === "accepted") {
-        console.log("PWA installation was accepted");
+        console.log("PWA installation is accepted");
       } else {
-        alert("PWA installation rejected");
+        alert("PWA installation is rejected");
       }
+
       installPromptRef.current = null;
     }
   };
 
   const handleClickButton = async () => {
     if (isPWAActive) {
-      window.location.href = "https://youtube.com";
+      window.location.href = "https://www.youtube.com/watch?v=OyDyOweu-PA";
     } else if (!downloaded) {
       setLoading(true);
     } else {
@@ -118,21 +115,15 @@ const MainView = () => {
               </div>
             </div>
 
-            <div className="button-container desktop">
-              {!loading && (
-                <div onClick={handleClickButton} className="button">
-                  {isPWAActive ? "open" : downloaded ? "Install" : "Download"}
-                </div>
-              )}
-
-              {loading && (
-                <ProgressBar
-                  onComplete={handleCompleteProgressBar}
-                  loading={loading}
-                  setLoading={setLoading}
-                />
-              )}
-            </div>
+            <Button
+              variant="desktop"
+              loading={loading}
+              isPWAActive={isPWAActive}
+              downloaded={downloaded}
+              onClickButton={handleClickButton}
+              onCompleteProgressBar={handleCompleteProgressBar}
+              setLoading={setLoading}
+            />
           </div>
         </div>
 
@@ -209,20 +200,16 @@ const MainView = () => {
           </div>
         </div>
 
-        <div className="button-container mobile">
-          {!loading && (
-            <div onClick={handleClickButton} className="button">
-              {isPWAActive ? "open" : downloaded ? "Install" : "Download"}
-            </div>
-          )}
-
-          {loading && (
-            <ProgressBar
-              onComplete={handleCompleteProgressBar}
-              loading={loading}
-              setLoading={setLoading}
-            />
-          )}
+        <div>
+          <Button
+            variant="mobile"
+            loading={loading}
+            isPWAActive={isPWAActive}
+            downloaded={downloaded}
+            onClickButton={handleClickButton}
+            onCompleteProgressBar={handleCompleteProgressBar}
+            setLoading={setLoading}
+          />
         </div>
       </div>
     </div>

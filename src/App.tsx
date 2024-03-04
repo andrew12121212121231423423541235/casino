@@ -1,7 +1,7 @@
 // @ts-ignore
 import React from "react";
 import "./App.css";
-import MainView from "./components/MainView.tsx";
+import MainView from "../src/views/MainView.tsx";
 
 function App() {
   return (
